@@ -15,6 +15,13 @@ app.use(
   })
 );
 app.use(cookieParser());
+app.use(express.static("public"));
+app.use(
+  cors({
+    orgin: process.env.CORS_ORIGIN,
+    credentials: true,
+  })
+);
 
 // Importing and using routes
 import course from "./routes/course.routes.js";
