@@ -71,6 +71,9 @@ export const logout = catchAsyncError(async (req, res, next) => {
     .status(200)
     .cookie("token", null, {
       expires: new Date(Date.now()),
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
     })
     .json({
       success: true,
@@ -122,7 +125,7 @@ export const changePassword = catchAsyncError(async (req, res, next) => {
   await user.save();
   res.status(200).json({
     success: true,
-    message: "Password change successfully",
+    message: "Password changed successfully",
   });
 });
 
@@ -219,7 +222,7 @@ export const resetPassword = catchAsyncError(async (req, res, next) => {
 // add to playlist
 export const addToPlaylist = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.user._id);
-  const course = await Course.findById(req.body._id);
+  const course = await Course.findById(req.body.id);
 
   if (!course) return next(new ErrorHandler("Invalid course Id", 404));
   const itemExist = user.playlist.find((item) => {
